@@ -1,0 +1,11 @@
+﻿tipo,repositorio,numero,titulo,status,responsaveis,url
+Issue,Lab_Experimentacao_Software,12,Lab01_Sprint02 - Exportar snapshot do Project,Review,bruna-bernardes,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/12
+Issue,Lab_Experimentacao_Software,8,Lab01_Sprint02 - Validar RQ01 e RQ02 e elaborar hipóteses,Done,WalterLouback,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/8
+Issue,Lab_Experimentacao_Software,7,Lab01_Sprint02 - Coletar 1000 repositórios e exportar dados para CSV,Done,bruna-bernardes,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/7
+Issue,Lab_Experimentacao_Software,9,Lab01_Sprint02 - Validar RQ03 e RQ04 e elaborar hipóteses,Done,bruna-bernardes,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/9
+Issue,Lab_Experimentacao_Software,10,Lab01_Sprint02 - Validar RQ05 e RQ06 e elaborar hipóteses,Done,analuizazzz,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/10
+Issue,Lab_Experimentacao_Software,11,Lab01_Sprint02 - Elaborar primeira versão do relatório,Done,analuizazzz,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/11
+Issue,Lab_Experimentacao_Software,1,Lab01_Sprint01 - RQ01 e RQ02: idade e pull requests aceitas,Done,WalterLouback,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/1
+Issue,Lab_Experimentacao_Software,6,Lab01_Sprint01 - Extra: correlação RQ05 x RQ06 (linguagem popular x taxa de issues fechadas),Done,analuizazzz,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/6
+Issue,Lab_Experimentacao_Software,3,Lab01_Sprint01 - RQ05 e RQ06: linguagem e issues fechadas,Done,analuizazzz,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/3
+Issue,Lab_Experimentacao_Software,2,Lab01_Sprint01 - RQ03 e RQ04: releases e última atualização,Done,bruna-bernardes,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/2
