@@ -2,7 +2,7 @@ import os
 import json
 import time
 import requests
-from config import GITHUB_TOKEN, GRAPHQL_URL, NUM_REPOS, PAGE_SIZE
+from Laboratorio_01.códigos.config import GITHUB_TOKEN, GRAPHQL_URL, NUM_REPOS, PAGE_SIZE
 
 
 def run_query(query, variables=None, max_tentativas=5):

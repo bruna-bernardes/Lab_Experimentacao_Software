@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+
+Laboratorio_01/códigos/data/raw_repos.json
+Laboratorio_01/códigos/data/checkpoint_paginacao.json

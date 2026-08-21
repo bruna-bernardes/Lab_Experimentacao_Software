@@ -1,14 +1,14 @@
 import json
 import csv
 import os
-from rq01_age import process_rq01, validate_rq01
-from rq02_pull_requests import process_rq02, validate_rq02
-from rq03_releases import process_rq03, validate_rq03
-from rq04_update_frequency import process_rq04, validate_rq04
-from rq05_languages import process_rq05, validate_rq05, POPULAR_LANGUAGES_TIOBE
-from rq06_issues import process_rq06, validate_rq06
-from api_client import fetch_repos
-from config import NUM_REPOS, VALIDATION_SAMPLE_SIZE
+from Laboratorio_01.sprint1_rqs.rq01_age import process_rq01, validate_rq01
+from Laboratorio_01.sprint1_rqs.rq02_pull_requests import process_rq02, validate_rq02
+from Laboratorio_01.sprint1_rqs.rq03_releases import process_rq03, validate_rq03
+from Laboratorio_01.sprint1_rqs.rq04_update_frequency import process_rq04, validate_rq04
+from Laboratorio_01.sprint1_rqs.rq05_languages import process_rq05, validate_rq05, POPULAR_LANGUAGES_TIOBE
+from Laboratorio_01.sprint1_rqs.rq06_issues import process_rq06, validate_rq06
+from Laboratorio_01.códigos.api_client import fetch_repos
+from Laboratorio_01.códigos.config import NUM_REPOS, VALIDATION_SAMPLE_SIZE
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 os.makedirs(DATA_DIR, exist_ok=True)

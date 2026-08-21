@@ -4,10 +4,10 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from api_client import fetch_repos
-from rq01_age import process_rq01, validate_rq01
-from rq02_pull_requests import process_rq02, validate_rq02
-from config import NUM_REPOS, VALIDATION_SAMPLE_SIZE
+from Laboratorio_01.códigos.api_client import fetch_repos
+from Laboratorio_01.sprint1_rqs.rq01_age import process_rq01, validate_rq01
+from Laboratorio_01.sprint1_rqs.rq02_pull_requests import process_rq02, validate_rq02
+from Laboratorio_01.códigos.config import NUM_REPOS, VALIDATION_SAMPLE_SIZE
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 os.makedirs(DATA_DIR, exist_ok=True)
