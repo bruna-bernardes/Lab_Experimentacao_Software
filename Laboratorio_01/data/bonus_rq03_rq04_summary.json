@@ -1,0 +1,18 @@
+{
+  "rq03_extra": {
+    "analise": "Estrelas x Total de Releases",
+    "total_repositorios": 1000,
+    "spearman_rho": -0.022,
+    "p_value": 0.487141,
+    "significativo_5pct": false,
+    "interpretacao": "Não foi identificada correlação estatisticamente significativa."
+  },
+  "rq04_extra": {
+    "analise": "Estrelas x Dias desde última atualização",
+    "total_repositorios": 1000,
+    "spearman_rho": -0.3195,
+    "p_value": 0.0,
+    "significativo_5pct": true,
+    "interpretacao": "Foi encontrada uma correlação moderada. Os resultados indicam que repositórios com mais estrelas tendem a ter atualizações mais recentes."
+  }
+}
