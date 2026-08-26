@@ -1,0 +1,42 @@
+{
+  "hypothesis_test_popular_vs_others": {
+    "n_populares": 793,
+    "n_outras": 120,
+    "mediana_populares": 0.8808,
+    "mediana_outras": 0.7873,
+    "u_statistic": 57018.5,
+    "p_value": 0.000455,
+    "significativo_5pct": true
+  },
+  "correlation_stars_vs_closed_ratio": {
+    "spearman_rho": 0.006,
+    "p_value": 0.849302,
+    "interpretacao": "sem correlação estatisticamente significativa"
+  },
+  "rq07_hypothesis_tests": {
+    "accepted_prs": {
+      "metrica": "PRs Aceitas (RQ02)",
+      "mediana_populares": 1074,
+      "mediana_outras": 315,
+      "u_statistic": 63236.5,
+      "p_value": 0.0,
+      "significativo_5pct": true
+    },
+    "total_releases": {
+      "metrica": "Total de Releases (RQ03)",
+      "mediana_populares": 67,
+      "mediana_outras": 1,
+      "u_statistic": 69460.5,
+      "p_value": 0.0,
+      "significativo_5pct": true
+    },
+    "days_since_last_update": {
+      "metrica": "Dias desde a Última Atualização (RQ04)",
+      "mediana_populares": 5,
+      "mediana_outras": 5,
+      "u_statistic": 47976.0,
+      "p_value": 0.757422,
+      "significativo_5pct": false
+    }
+  }
+}
