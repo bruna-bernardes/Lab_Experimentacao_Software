@@ -1,0 +1,31 @@
+{
+  "total_repositorios": 1000,
+  "rq01": {
+    "idade_minima": 0.04,
+    "idade_maxima": 18.38,
+    "idade_media": 7.67,
+    "idade_mediana": 7.76,
+    "distribuicao": {
+      "0–2 anos": 138,
+      "3–5 anos": 186,
+      "6–8 anos": 191,
+      "9–11 anos": 215,
+      "12–15 anos": 221,
+      "Mais de 15 anos": 49
+    }
+  },
+  "rq02": {
+    "prs_minimo": 0,
+    "prs_maximo": 103403,
+    "prs_media": 4243.3,
+    "prs_mediana": 770,
+    "distribuicao": {
+      "0 PRs": 20,
+      "1–10": 31,
+      "11–100": 131,
+      "101–1.000": 368,
+      "1.001–10.000": 351,
+      "Mais de 10.000": 99
+    }
+  }
+}
