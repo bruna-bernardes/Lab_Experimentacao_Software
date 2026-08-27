@@ -11,30 +11,17 @@ from scipy import stats
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LAB_DIR = os.path.dirname(BASE_DIR)
+
 DATA_DIR = os.path.join(LAB_DIR, "data")
+EXTRAS_DIR = os.path.join(LAB_DIR, "data_extras")
 
-os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(EXTRAS_DIR, exist_ok=True)
 
-REPOS_CSV = os.path.join(
-    DATA_DIR,
-    "repositorios_1000.csv"
-)
+REPOS_CSV = os.path.join(DATA_DIR, "repositorios_1000.csv")
 
-SUMMARY_JSON = os.path.join(
-    DATA_DIR,
-    "bonus_rq03_rq04_summary.json"
-)
-
-GRAFICO_RQ03 = os.path.join(
-    DATA_DIR,
-    "bonus_rq03_estrelas_releases.png"
-)
-
-GRAFICO_RQ04 = os.path.join(
-    DATA_DIR,
-    "bonus_rq04_estrelas_atualizacao.png"
-)
-
+SUMMARY_JSON = os.path.join(EXTRAS_DIR, "bonus_rq03_rq04_summary.json")
+GRAFICO_RQ03 = os.path.join(EXTRAS_DIR, "bonus_rq03_estrelas_releases.png")
+GRAFICO_RQ04 = os.path.join(EXTRAS_DIR, "bonus_rq04_distribuicao_atualizacao.png")
 
 def carregar_dados():
     if not os.path.exists(REPOS_CSV):
@@ -265,8 +252,9 @@ def gerar_grafico_rq03(dados):
     )
 
     ax.set_xscale("log")
-    ax.set_yscale("symlog")
-
+    ax.set_yscale("symlog") 
+    ax.set_ylim(bottom=0)
+    
     ax.set_xlabel(
         "Número de estrelas (escala log)"
     )
@@ -292,41 +280,76 @@ def gerar_grafico_rq03(dados):
 
 
 def gerar_grafico_rq04(dados):
-    estrelas = [
-        item["stars"]
-        for item in dados
-    ]
+    faixas = {
+        "0 dias": 0,
+        "1–7 dias": 0,
+        "8–30 dias": 0,
+        "31–90 dias": 0,
+        "91–365 dias": 0,
+        "Mais de 365 dias": 0
+    }
 
-    dias = [
-        item["days_since_last_update"]
-        for item in dados
-    ]
+    for item in dados:
+        dias = item["days_since_last_update"]
+
+        if dias == 0:
+            faixas["0 dias"] += 1
+
+        elif dias <= 7:
+            faixas["1–7 dias"] += 1
+
+        elif dias <= 30:
+            faixas["8–30 dias"] += 1
+
+        elif dias <= 90:
+            faixas["31–90 dias"] += 1
+
+        elif dias <= 365:
+            faixas["91–365 dias"] += 1
+
+        else:
+            faixas["Mais de 365 dias"] += 1
+
+    categorias = list(faixas.keys())
+    quantidades = list(faixas.values())
 
     fig, ax = plt.subplots(
-        figsize=(9, 6)
+        figsize=(10, 6)
     )
 
-    ax.scatter(
-        estrelas,
-        dias,
-        alpha=0.4,
-        s=15
+    barras = ax.bar(
+        categorias,
+        quantidades
     )
-
-    ax.set_xscale("log")
-    ax.set_yscale("symlog")
 
     ax.set_xlabel(
-        "Número de estrelas (escala log)"
+        "Tempo desde a última atualização"
     )
 
     ax.set_ylabel(
-        "Dias desde a última atualização"
+        "Quantidade de repositórios"
     )
 
     ax.set_title(
-        "RQ04 Extra — Estrelas x Última Atualização"
+        "RQ04 Extra — Distribuição do Tempo desde a Última Atualização"
     )
+
+    ax.tick_params(
+        axis="x",
+        rotation=20
+    )
+
+    # Mostra a quantidade acima de cada barra
+    for barra in barras:
+        altura = barra.get_height()
+
+        ax.text(
+            barra.get_x() + barra.get_width() / 2,
+            altura,
+            str(int(altura)),
+            ha="center",
+            va="bottom"
+        )
 
     plt.tight_layout()
 
@@ -338,7 +361,6 @@ def gerar_grafico_rq04(dados):
     plt.close(fig)
 
     return GRAFICO_RQ04
-
 
 def gerar_texto_relatorio(
     rq03,
@@ -394,26 +416,18 @@ def salvar_resultados(
 
 def main():
     print("=" * 60)
-    print(
-        "ANÁLISE EXTRA — RQ03 E RQ04"
-    )
+    print("ANÁLISE EXTRA — RQ03 E RQ04")
     print("=" * 60)
 
     dados = carregar_dados()
 
     if len(dados) < 2:
         raise Exception(
-            "Amostra insuficiente para "
-            "realizar as correlações."
+            "Amostra insuficiente para realizar as correlações."
         )
 
-    rq03 = analisar_rq03(
-        dados
-    )
-
-    rq04 = analisar_rq04(
-        dados
-    )
+    rq03 = analisar_rq03(dados)
+    rq04 = analisar_rq04(dados)
 
     print()
     print(
