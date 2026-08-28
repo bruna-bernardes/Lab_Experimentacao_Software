@@ -18,7 +18,7 @@ PASTA_SNAPSHOTS = os.path.join(
     "snapshots"
 )
 
-SPRINT = "Lab01S02"
+SPRINT = "Lab01S03"
 
 
 def obter_token():
