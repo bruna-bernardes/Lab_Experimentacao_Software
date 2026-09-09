@@ -1,6 +1,7 @@
 .venv/
 __pycache__/
 *.pyc
+node_modules/
 
 Laboratorio_01/códigos/data/raw_repos.json
 Laboratorio_01/códigos/data/checkpoint_paginacao.json
