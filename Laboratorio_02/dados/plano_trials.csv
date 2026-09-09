@@ -1,0 +1,13 @@
+participante,ordem,kata,tratamento,timebox_minutos
+Bruna,1,kata_01,COM_IA,35
+Bruna,2,kata_02,SEM_IA,35
+Bruna,3,kata_03,SEM_IA,35
+Bruna,4,kata_04,COM_IA,35
+Ana,1,kata_02,COM_IA,35
+Ana,2,kata_03,COM_IA,35
+Ana,3,kata_04,SEM_IA,35
+Ana,4,kata_01,SEM_IA,35
+Walter,1,kata_03,SEM_IA,35
+Walter,2,kata_04,COM_IA,35
+Walter,3,kata_01,SEM_IA,35
+Walter,4,kata_02,COM_IA,35
