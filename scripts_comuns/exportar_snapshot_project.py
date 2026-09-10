@@ -1,3 +1,4 @@
+import argparse
 import csv
 import json
 import os
@@ -6,19 +7,10 @@ import requests
 
 
 GRAPHQL_URL = "https://api.github.com/graphql"
-
 NOME_PROJECT = "Laboratório de Experimentação de Software"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 REPO_DIR = os.path.dirname(BASE_DIR)
-
-PASTA_SNAPSHOTS = os.path.join(
-    REPO_DIR,
-    "snapshots"
-)
-
-SPRINT = "Lab01S03"
 
 
 def obter_token():
@@ -242,15 +234,21 @@ def preparar_linhas(itens):
     return linhas
 
 
-def salvar_csv(linhas):
+def salvar_csv(linhas, laboratorio, sprint):
+    pasta_snapshots = os.path.join(
+        REPO_DIR,
+        laboratorio,
+        "snapshots"
+    )
+
     os.makedirs(
-        PASTA_SNAPSHOTS,
+        pasta_snapshots,
         exist_ok=True
     )
 
     caminho = os.path.join(
-        PASTA_SNAPSHOTS,
-        f"{SPRINT}.csv"
+        pasta_snapshots,
+        f"{sprint}.csv"
     )
 
     colunas = [
@@ -281,6 +279,24 @@ def salvar_csv(linhas):
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="Exporta snapshot do GitHub Project."
+    )
+
+    parser.add_argument(
+        "--laboratorio",
+        required=True,
+        help="Ex.: Laboratorio_02"
+    )
+
+    parser.add_argument(
+        "--sprint",
+        required=True,
+        help="Ex.: Lab02S01"
+    )
+
+    args = parser.parse_args()
+
     print("Localizando GitHub Project...")
 
     projeto = localizar_project()
@@ -303,7 +319,11 @@ def main():
 
     linhas = preparar_linhas(itens)
 
-    caminho = salvar_csv(linhas)
+    caminho = salvar_csv(
+        linhas,
+        args.laboratorio,
+        args.sprint
+    )
 
     print()
     print("Snapshot exportado com sucesso!")
