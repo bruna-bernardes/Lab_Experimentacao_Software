@@ -1,0 +1,2 @@
+participante,kata,tratamento,caminho_analisado,loc,funcoes_analisadas,complexidade_ciclomatica_media,maintainability_index,duplicacao_percentual,linhas_duplicadas
+Bruna,kata_01,COM_IA,C:\Users\Bruna Bernardes\OneDrive\Área de Trabalho\Lab_Experimentacao_Software\Laboratorio_02\resultados_trials\Bruna\kata_01_COM_IA\solucao.py,30,1,10.0,54.64,0.0,0
