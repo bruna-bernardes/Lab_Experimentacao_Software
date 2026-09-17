@@ -63,6 +63,26 @@ def assinatura_arquivos(caminho_kata):
     return tuple(sorted(arquivos))
 
 
+def solicitar_numero_prompts(tratamento):
+    if tratamento != "COM_IA":
+        return 0
+
+    while True:
+        valor = input(
+            "\nQuantidade de prompts/interações com a IA neste trial: "
+        ).strip()
+
+        try:
+            numero = int(valor)
+
+            if numero < 0:
+                raise ValueError
+
+            return numero
+        except ValueError:
+            print("Informe um número inteiro maior ou igual a zero.")
+
+
 def salvar_resultado(
     arquivo_csv,
     participante,
@@ -72,7 +92,11 @@ def salvar_resultado(
     censurado,
     resultado_testes,
     inicio,
-    fim
+    fim,
+    tempo_primeiro_teste,
+    numero_iteracoes,
+    numero_execucoes_testes,
+    numero_prompts
 ):
     arquivo_csv.parent.mkdir(parents=True, exist_ok=True)
     arquivo_existe = arquivo_csv.exists()
@@ -94,7 +118,20 @@ def salvar_resultado(
         "testes_total": total,
         "testes_passando": passando,
         "testes_falhando": falhando,
-        "taxa_sucesso_percentual": round(taxa_sucesso, 2)
+        "taxa_sucesso_percentual": round(taxa_sucesso, 2),
+        "time_to_first_pass_segundos": (
+            round(tempo_primeiro_teste, 2)
+            if tempo_primeiro_teste is not None
+            else ""
+        ),
+        "time_to_first_pass_minutos": (
+            round(tempo_primeiro_teste / 60, 2)
+            if tempo_primeiro_teste is not None
+            else ""
+        ),
+        "numero_iteracoes": numero_iteracoes,
+        "numero_execucoes_testes": numero_execucoes_testes,
+        "numero_prompts_ia": numero_prompts
     }
 
     with arquivo_csv.open("a", newline="", encoding="utf-8") as arquivo:
@@ -163,7 +200,14 @@ def main():
 
     inicio_data = datetime.now()
     inicio = time.monotonic()
+
     assinatura_anterior = None
+    primeira_execucao = True
+
+    tempo_primeiro_teste = None
+    numero_iteracoes = 0
+    numero_execucoes_testes = 0
+
     ultimo_resultado = {
         "total": 0,
         "passando": 0,
@@ -172,7 +216,10 @@ def main():
     }
 
     print("\nTrial iniciado. Edite normalmente o código do kata.")
-    print("Os testes serão executados automaticamente quando o código-fonte for salvo.\n")
+    print(
+        "Os testes serão executados automaticamente "
+        "quando o código-fonte for salvo.\n"
+    )
 
     try:
         while True:
@@ -180,9 +227,20 @@ def main():
 
             if decorrido >= TIMEBOX_SEGUNDOS:
                 print("\nTempo limite de 35 minutos atingido.")
+
                 ultimo_resultado = executar_testes(caminho_kata)
+                numero_execucoes_testes += 1
+
+                if (
+                    tempo_primeiro_teste is None
+                    and ultimo_resultado["passando"] > 0
+                ):
+                    tempo_primeiro_teste = TIMEBOX_SEGUNDOS
 
                 fim_data = datetime.now()
+                numero_prompts = solicitar_numero_prompts(
+                    args.tratamento
+                )
 
                 salvar_resultado(
                     arquivo_csv=arquivo_csv,
@@ -193,7 +251,11 @@ def main():
                     censurado=True,
                     resultado_testes=ultimo_resultado,
                     inicio=inicio_data,
-                    fim=fim_data
+                    fim=fim_data,
+                    tempo_primeiro_teste=tempo_primeiro_teste,
+                    numero_iteracoes=numero_iteracoes,
+                    numero_execucoes_testes=numero_execucoes_testes,
+                    numero_prompts=numero_prompts
                 )
 
                 print(
@@ -207,9 +269,25 @@ def main():
 
             if assinatura_atual != assinatura_anterior:
                 assinatura_anterior = assinatura_atual
-                ultimo_resultado = executar_testes(caminho_kata)
 
-                minutos = decorrido / 60
+                if primeira_execucao:
+                    primeira_execucao = False
+                else:
+                    numero_iteracoes += 1
+
+                ultimo_resultado = executar_testes(caminho_kata)
+                numero_execucoes_testes += 1
+
+                tempo_execucao = time.monotonic() - inicio
+
+                if (
+                    tempo_primeiro_teste is None
+                    and ultimo_resultado["passando"] > 0
+                ):
+                    tempo_primeiro_teste = tempo_execucao
+
+                minutos = tempo_execucao / 60
+
                 print(
                     f"[{minutos:05.2f} min] "
                     f"{ultimo_resultado['passando']}/"
@@ -220,6 +298,10 @@ def main():
                     fim_data = datetime.now()
                     tempo_final = time.monotonic() - inicio
 
+                    numero_prompts = solicitar_numero_prompts(
+                        args.tratamento
+                    )
+
                     salvar_resultado(
                         arquivo_csv=arquivo_csv,
                         participante=args.participante,
@@ -229,12 +311,34 @@ def main():
                         censurado=False,
                         resultado_testes=ultimo_resultado,
                         inicio=inicio_data,
-                        fim=fim_data
+                        fim=fim_data,
+                        tempo_primeiro_teste=tempo_primeiro_teste,
+                        numero_iteracoes=numero_iteracoes,
+                        numero_execucoes_testes=numero_execucoes_testes,
+                        numero_prompts=numero_prompts
                     )
 
                     print("\nTodos os testes passaram.")
                     print(
-                        f"Time-to-green: {tempo_final / 60:.2f} minutos."
+                        f"Time-to-green: "
+                        f"{tempo_final / 60:.2f} minutos."
+                    )
+
+                    if tempo_primeiro_teste is not None:
+                        print(
+                            "Time-to-first-pass: "
+                            f"{tempo_primeiro_teste / 60:.2f} minutos."
+                        )
+
+                    print(
+                        f"Iterações de código: {numero_iteracoes}"
+                    )
+                    print(
+                        "Execuções automáticas de testes: "
+                        f"{numero_execucoes_testes}"
+                    )
+                    print(
+                        f"Prompts/interações com IA: {numero_prompts}"
                     )
                     print("Resultado salvo com sucesso.")
                     break
@@ -242,7 +346,10 @@ def main():
             time.sleep(INTERVALO_VERIFICACAO)
 
     except KeyboardInterrupt:
-        print("\nTrial interrompido manualmente. Nenhum resultado foi salvo.")
+        print(
+            "\nTrial interrompido manualmente. "
+            "Nenhum resultado foi salvo."
+        )
 
 
 if __name__ == "__main__":

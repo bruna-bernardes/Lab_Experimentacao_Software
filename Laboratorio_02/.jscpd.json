@@ -1,0 +1,9 @@
+{
+  "minLines": 5,
+  "minTokens": 50,
+  "mode": "mild",
+  "reporters": [
+    "json"
+  ],
+  "gitignore": true
+}
