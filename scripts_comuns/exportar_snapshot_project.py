@@ -2,7 +2,9 @@ import argparse
 import csv
 import json
 import os
+import re
 import subprocess
+
 import requests
 
 
@@ -197,13 +199,39 @@ def obter_status(item):
     return ""
 
 
-def preparar_linhas(itens):
+def obter_prefixo_sprint(sprint):
+    match = re.fullmatch(
+        r"Lab(\d+)S(\d+)",
+        sprint,
+        re.IGNORECASE
+    )
+
+    if not match:
+        raise ValueError(
+            "Formato de sprint inválido. "
+            "Use, por exemplo: Lab02S02"
+        )
+
+    laboratorio = match.group(1)
+    numero_sprint = match.group(2)
+
+    return f"Lab{laboratorio}_Sprint{numero_sprint}"
+
+
+def preparar_linhas(itens, sprint):
     linhas = []
+
+    prefixo_sprint = obter_prefixo_sprint(sprint)
 
     for item in itens:
         conteudo = item.get("content")
 
         if not conteudo:
+            continue
+
+        titulo = conteudo.get("title", "")
+
+        if not titulo.startswith(prefixo_sprint):
             continue
 
         tipo = conteudo.get("__typename", "")
@@ -225,7 +253,7 @@ def preparar_linhas(itens):
             "tipo": tipo,
             "repositorio": repositorio,
             "numero": conteudo.get("number", ""),
-            "titulo": conteudo.get("title", ""),
+            "titulo": titulo,
             "status": obter_status(item),
             "responsaveis": responsaveis,
             "url": conteudo.get("url", "")
@@ -292,10 +320,14 @@ def main():
     parser.add_argument(
         "--sprint",
         required=True,
-        help="Ex.: Lab02S01"
+        help="Ex.: Lab02S02"
     )
 
     args = parser.parse_args()
+
+    prefixo_sprint = obter_prefixo_sprint(
+        args.sprint
+    )
 
     print("Localizando GitHub Project...")
 
@@ -314,10 +346,22 @@ def main():
     )
 
     print(
-        f"{len(itens)} itens encontrados."
+        f"{len(itens)} itens encontrados no Project."
     )
 
-    linhas = preparar_linhas(itens)
+    print(
+        f"Filtrando itens da sprint: "
+        f"{prefixo_sprint}"
+    )
+
+    linhas = preparar_linhas(
+        itens,
+        args.sprint
+    )
+
+    print(
+        f"{len(linhas)} itens pertencem à sprint."
+    )
 
     caminho = salvar_csv(
         linhas,
