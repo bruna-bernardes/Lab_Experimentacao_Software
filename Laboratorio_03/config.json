@@ -1,0 +1,7 @@
+{
+  "inicio": "2025-10-01T00:00:00Z",
+  "fim": "2026-09-30T23:59:59Z",
+  "quantidade": 100,
+  "maximo_candidatos": 1000,
+  "diretorio_saida": "dados"
+}

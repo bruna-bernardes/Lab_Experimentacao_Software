@@ -1,0 +1,35 @@
+
+name: Lab03 - Testes
+
+on:
+  push:
+    paths:
+      - "Laboratorio_03/**"
+      - ".github/workflows/lab03-testes.yml"
+  pull_request:
+    paths:
+      - "Laboratorio_03/**"
+      - ".github/workflows/lab03-testes.yml"
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Laboratorio_03
+
+    steps:
+      - name: Checkout do repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements.txt
+
+      - name: Executar testes e verificar cobertura
+        run: python -m pytest tests/ --cov=metricas --cov-report=term-missing --cov-fail-under=80

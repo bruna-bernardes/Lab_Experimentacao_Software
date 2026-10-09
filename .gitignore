@@ -1,7 +1,14 @@
 .venv/
+.cache/
 __pycache__/
+.pytest_cache/
+.env
+.coverage
 *.pyc
 node_modules/
+*.tmp
 
 Laboratorio_01/códigos/data/raw_repos.json
 Laboratorio_01/códigos/data/checkpoint_paginacao.json
+# Dados brutos do Lab 03
+Laboratorio_03/dados/
