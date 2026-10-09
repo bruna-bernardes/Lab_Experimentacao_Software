@@ -1,0 +1,6 @@
+﻿tipo,repositorio,numero,titulo,status,responsaveis,url
+Issue,Lab_Experimentacao_Software,46,Lab03_Sprint01 - Exportar snapshot do Project,Review,bruna-bernardes,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/46
+Issue,Lab_Experimentacao_Software,44,"Lab03_Sprint01 - Coleta de workflows, cache e métricas de falha",Done,WalterLouback,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/44
+Issue,Lab_Experimentacao_Software,42,Lab03_Sprint01 - Seleção de repositórios e coleta de metadados,Done,bruna-bernardes,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/42
+Issue,Lab_Experimentacao_Software,43,"Lab03_Sprint01 - Coleta de releases, commits e cálculo de lead time",Done,analuizazzz,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/43
+Issue,Lab_Experimentacao_Software,45,"Lab03_Sprint01 -  Integração do pipeline, documentação e CI",Done,bruna-bernardes,https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/45
