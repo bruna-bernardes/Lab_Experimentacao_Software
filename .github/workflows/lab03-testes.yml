@@ -31,5 +31,11 @@ jobs:
       - name: Instalar dependencias
         run: python -m pip install -r requirements.txt
 
-      - name: Executar testes e verificar cobertura
+      - name: Executar testes e verificar cobertura do modulo de metricas
         run: python -m pytest tests/ --cov=metricas --cov-report=term-missing --cov-fail-under=80
+
+      - name: Cobertura dos demais modulos (informativa)
+        run: python -m pytest tests/ -q --cov=heuristica --cov=pipeline --cov=validacao --cov-report=term
+
+      - name: Conferir dicionario de dados
+        run: python -m pipeline.dicionario
