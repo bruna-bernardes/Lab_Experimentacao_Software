@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from statistics import median
 
@@ -103,4 +102,68 @@ def calcular_recuperacao(runs):
         "episodios_censurados": censurados,
         "proporcao_censura": censurados / (len(tempos) + censurados)
         if tempos or censurados else None
+    }
+
+
+# --- Sprint 2 (Lab03S02) ------------------------------------------------------
+
+def deployment_frequency(n_releases, inicio, fim):
+    """RQ 01: releases publicadas por semana. Semanas = duração da janela em
+    dias / 7 (≈ 52,1 para uma janela de 12 meses)."""
+    semanas = (data_hora(fim) - data_hora(inicio)).total_seconds() / (7 * 24 * 3600)
+
+    if semanas <= 0:
+        raise ValueError("A janela de observação precisa ter duração positiva.")
+
+    return n_releases / semanas
+
+
+def calcular_cfr_entrega(releases, classificar, inicio, fim, dias=7):
+    """RQ 03 (b): proporção de releases seguidas, em até ``dias``, por uma
+    release corretiva.
+
+    ``releases``: releases publicadas (sem drafts e sem pré-releases) com
+    ``published_at``, em qualquer ordem; podem incluir releases fora da janela.
+    ``classificar(anterior, atual)``: devolve True se ``atual`` é corretiva.
+
+    Regra adotada: a release R da janela falha quando a release imediatamente
+    seguinte R' é publicada em até ``dias`` dias depois de R **e** é corretiva.
+    Releases publicadas nos últimos ``dias`` dias da janela são censuradas
+    (ficam fora do denominador).
+    """
+    from datetime import timedelta
+
+    inicio_dt, fim_dt = data_hora(inicio), data_hora(fim)
+    limite_avaliacao = fim_dt - timedelta(days=dias)
+    prazo = timedelta(days=dias)
+
+    ordenadas = sorted(releases, key=lambda r: data_hora(r["published_at"]))
+    avaliadas = falhas = censuradas = 0
+
+    for indice, release in enumerate(ordenadas):
+        publicada = data_hora(release["published_at"])
+
+        if not inicio_dt <= publicada <= fim_dt:
+            continue
+
+        if publicada > limite_avaliacao:
+            censuradas += 1
+            continue
+
+        avaliadas += 1
+
+        if indice + 1 >= len(ordenadas):
+            continue
+
+        seguinte = ordenadas[indice + 1]
+        intervalo = data_hora(seguinte["published_at"]) - publicada
+
+        if intervalo <= prazo and classificar(release, seguinte):
+            falhas += 1
+
+    return {
+        "cfr": falhas / avaliadas if avaliadas else None,
+        "avaliadas": avaliadas,
+        "falhas": falhas,
+        "censuradas": censuradas
     }
