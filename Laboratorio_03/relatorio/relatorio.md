@@ -37,3 +37,27 @@ Hipótese: espera-se que características como linguagem principal, popularidade
 Hipótese: espera-se que a utilização de diferentes definições operacionais provoque alterações na classificação de parte dos repositórios, demonstrando sensibilidade às aproximações utilizadas.
 
 Essas hipóteses serão investigadas nas próximas etapas do laboratório, utilizando os dados coletados e métodos de análise estatística previstos no estudo.
+# 2. Metodologia
+
+## 2.2 Critérios de seleção e funil
+
+Um repositório candidato foi incluído na amostra final quando, dentro da janela de observação, possuía pelo menos 5 releases publicadas (`draft = false`, `prerelease = false`) e pelo menos 50 *workflow runs* válidas no *default branch*, disparadas por `push` e com `conclusion` igual a `success`, `failure`, `timed_out` ou `startup_failure`. Os filtros foram aplicados em ordem crescente de custo de API: uso de GitHub Actions (`total_count > 0` em `/actions/workflows`), número de releases e número de runs. Os metadados mais custosos, como a contagem de contribuidores, foram coletados apenas para os repositórios elegíveis. Repositórios com erro persistente após três tentativas foram registrados separadamente.
+
+A Tabela X apresenta o funil de seleção (`resultados/funil_selecao.csv`):
+
+| Etapa | Repositórios |
+|---|---|
+| População da busca | `<pendente>` |
+| Candidatos examinados | `<pendente>` |
+| Sem GitHub Actions | `<pendente>` |
+| Com GitHub Actions | `<pendente>` |
+| Menos de 5 releases na janela | `<pendente>` |
+| Menos de 50 runs válidas na janela | `<pendente>` |
+| Erros persistentes | `<pendente>` |
+| **Amostra final** | `<pendente>` |
+
+## 2.3 Janela de observação e coleta
+
+A janela de observação compreende 12 meses, de `<pendente: início>` a `<pendente: fim>`, conforme definido pelo professor. Apenas releases publicadas e runs criadas nesse intervalo entram nos cálculos. Para identificar a release anterior no cálculo do lead time, foi usado o histórico completo de releases do repositório.
+
+A coleta foi executada entre `<pendente: datas>` (`resultados/log_coleta.md`). Cada resposta da API foi armazenada em cache local, o que permitiu retomar a coleta após interrupções sem repetir chamadas. O pipeline respeita os cabeçalhos `X-RateLimit-Remaining` e `X-RateLimit-Reset` e repete erros temporários (5xx) com *backoff* exponencial. As runs foram consultadas mês a mês, e os períodos com 1.000 resultados ou mais foram subdivididos automaticamente. As comparações entre releases (`/compare/{anterior}...{atual}`) foram paginadas para superar o limite de 250 commits. Os dados intermediários (releases, commits e runs) e o dataset final foram exportados para arquivos CSV versionados, cujas colunas estão descritas no dicionário de dados (`resultados/dicionario_dados.md`).
