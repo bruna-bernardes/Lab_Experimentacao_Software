@@ -1,7 +1,11 @@
 ﻿etapa,quantidade
-candidatos,865
-sem_actions,393
-com_actions,472
-releases_insuficientes,330
-runs_insuficientes,42
-elegiveis,100
+populacao_busca,60162
+candidatos_examinados,2255
+sem_actions,934
+com_actions,1320
+releases_insuficientes,886
+runs_insuficientes,114
+elegiveis,320
+erros_persistentes,1
+erros_pendentes,0
+amostra_final,320
