@@ -7,7 +7,7 @@
   "max_tentativas_erro": 3,
   "coletar_tags": true,
   "versao_selecao": "selecao_v2",
-  "versao_heuristica": "v1",
+  "versao_heuristica": "v3",
   "diretorio_saida": "dados",
   "diretorio_resultados": "resultados",
   "diretorio_validacao": "validacao",
