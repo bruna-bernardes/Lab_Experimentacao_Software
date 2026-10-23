@@ -1,0 +1,15 @@
+{
+  "inicio": "2025-10-01T00:00:00Z",
+  "fim": "2026-09-30T23:59:59Z",
+  "quantidade": 320,
+  "maximo_candidatos": 6000,
+  "semente_amostragem": 42,
+  "max_tentativas_erro": 3,
+  "coletar_tags": true,
+  "versao_selecao": "selecao_v2",
+  "versao_heuristica": "v3",
+  "diretorio_saida": "dados",
+  "diretorio_resultados": "resultados",
+  "diretorio_validacao": "validacao",
+  "cache_dir": ".cache/github"
+}

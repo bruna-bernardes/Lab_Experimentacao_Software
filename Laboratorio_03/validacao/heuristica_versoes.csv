@@ -1,0 +1,4 @@
+﻿versao,descricao_regra,n_releases,tp,fp,fn,tn,precisao,recall,f1,atinge_limiar,data,commit
+v1,apenas patch E ao menos um commit fix/hotfix/bugfix/revert (sem SemVer: só mensagens),300,105,21,67,107,0.8333,0.6105,0.7047,true,2026-10-21,7648d2b
+v2,apenas patch E >= 50% dos commits de correção (sem SemVer: só a fração),300,34,8,138,120,0.8095,0.1977,0.3178,false,2026-10-21,7648d2b
+v3,apenas patch (sem SemVer: ao menos um commit de correção),300,130,27,42,101,0.828,0.7558,0.7903,true,2026-10-21,7648d2b

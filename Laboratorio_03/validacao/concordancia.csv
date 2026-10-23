@@ -1,0 +1,4 @@
+﻿dimensao,nivel,n_itens,n_avaliadores,n_categorias_usadas,kappa_fleiss,interpretacao,concordancia_unanime,concordancia_pares
+tipo_projeto,repositorios,60,3,3,0.5177,moderada,0.8,0.8667
+entregas_reais,repositorios,60,3,3,-0.0403,pobre,0.4,0.5778
+corretiva,releases,300,3,2,0.3687,razoavel,0.5267,0.6844
