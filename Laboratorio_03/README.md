@@ -85,6 +85,8 @@ O pipeline realiza a seleção, coleta releases e workflow runs, calcula as mét
 python -m pipeline.exportar   --config config.json   # resultados/: amostra, funil, releases, commits, runs
 python -m pipeline.consolidar --config config.json   # resultados/dataset_final.csv
 python -m pipeline.dicionario                        # confere e gera resultados/dicionario_dados.md
+python analise_sprint3.py                          # tabelas e figuras em resultados/sprint3/
+python relatorio/gerar_pdf.py                      # relatorio/relatorio.pdf
 ```
 
 ### Validação manual
@@ -150,4 +152,4 @@ Sprint 2:
 
 As métricas são aproximações obtidas de dados públicos do GitHub. Uma release não representa necessariamente um deploy em produção, assim como uma falha de CI não representa necessariamente uma falha em produção.
 
-A heurística de release corretiva é validada contra a amostra-ouro (`validacao/heuristica_versoes.csv`). As análises estatísticas das RQs são desenvolvidas na Sprint 3.
+A heurística de release corretiva usada no dataset é a versão v1, avaliada na amostra-ouro (`validacao/heuristica_versoes.csv`). Os resultados das RQ 01 a RQ 07 estão em `relatorio/relatorio.md` e em `resultados/sprint3/`.

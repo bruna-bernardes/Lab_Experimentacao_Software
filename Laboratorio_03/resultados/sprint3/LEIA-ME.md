@@ -1,6 +1,9 @@
 # Resultados da Sprint 3
 
-Os CSVs e PNGs desta pasta foram gerados por `python analise_sprint3.py`.
-A RQ07 usa três combinações reprodutíveis dos campos disponíveis no dataset.
-A variante por tags não foi coletada nos resultados versionados e, por isso,
-não é apresentada como se tivesse sido observada.
+Tabelas e figuras geradas por `python analise_sprint3.py` a partir de `resultados/dataset_final.csv` e `validacao/consenso_repositorios.csv`.
+
+Combinações da classificação geral:
+
+- C1: frequência, lead time por release, CFR de CI e tempo de recuperação.
+- C2: frequência, lead time por commit, CFR de entrega e tempo de recuperação.
+- C3: frequência, lead time por release, CFR de entrega e tempo de recuperação.
