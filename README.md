@@ -1,1 +1,0 @@
-# Lab_Experimentacao_Software
