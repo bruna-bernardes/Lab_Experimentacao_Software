@@ -1,93 +1,152 @@
 # LAB04 — Testes de Hipótese por Dentro
 
 **Disciplina:** Laboratório de Experimentação de Software — PUC Minas  
-**Sprint:** Lab04S01 (Sprint 1)  
 **Equipe:** Bruna, Ana e Walter  
-**Par escolhido (P4):** Teste Z para uma proporção × teste binomial exato
+**Par escolhido (P4):** Teste Z para uma proporção × teste binomial exato  
+**Etapas implementadas:** Lab04S01 e Lab04S02; dashboard preparado para a entrega final
 
 **Links:** [Repositório](https://github.com/bruna-bernardes/Lab_Experimentacao_Software) · [GitHub Projects](https://github.com/users/bruna-bernardes/projects/2/views/1)
 
-## 1. Objetivo da Sprint 1
+## 1. Objetivo e entregas
 
-Investigar como dois testes de hipótese se comportam ao avaliar a taxa de falhas de execuções de integração contínua (CI). Nesta sprint, o projeto apresenta dados reais, define o cenário e as hipóteses, gera dados simulados, aplica os dois testes a um conjunto simulado e exibe os gráficos **G1** e **G2** em um dashboard Streamlit.
+Investigar como os testes Z para uma proporção e binomial exato se comportam ao avaliar a proporção de falhas de execuções de integração contínua (CI) de um projeto open-source. Dados reais fundamentam o cenário; simulações de Monte Carlo permitem conhecer a proporção verdadeira de falhas e estimar erro tipo I e poder estatístico.
 
-As simulações de 10.000 repetições, as análises de erro tipo I e poder estatístico e os gráficos **G3** e **G4** pertencem à **Sprint 2**.
+- **Sprint 1 (Lab04S01):** coleta real, cenário, hipóteses, geração de dados binários, aplicação dos testes e gráficos G1/G2.
+- **Sprint 2 (Lab04S02):** Q1 (erro tipo I), Q2 (poder), Q3 (amostra pequena) e gráficos G3/G4.
+- **Entrega final:** dashboard completo com sete seções, tabela de resultados reais, recomendação e apresentação oral. A apresentação é uma etapa de avaliação separada da Sprint 2.
 
 ## 2. Cenário e hipóteses
 
-**Pergunta de pesquisa:** a proporção de execuções de CI com falha em um repositório público difere da meta de 5%?
+**Pergunta de pesquisa:** a proporção de execuções de CI com falha no repositório analisado difere da meta de 5%?
 
-- **H₀:** p = 0,05 — a proporção populacional de falhas é de 5%.
-- **H₁:** p ≠ 0,05 — a proporção populacional de falhas é diferente de 5%.
-- **Nível de significância:** α = 0,05.
-- **Tipo de teste:** bicaudal, pois se investigam desvios tanto abaixo quanto acima de 5%.
+- **H₀:** p = 0,05 (taxa populacional de falhas igual a 5%).
+- **H₁:** p ≠ 0,05 (taxa populacional de falhas diferente de 5%).
+- **Significância:** α = 0,05, com testes **bicaudais**.
+- **Variável:** `falha = 0` para sucesso e `falha = 1` para falha.
 
-Cada execução é representada por uma variável binária: `0` para sucesso e `1` para falha.
+O teste Z utiliza uma aproximação normal para a estatística da proporção; o binomial exato utiliza a distribuição binomial para calcular o p-valor. Em ambos, rejeitamos H₀ quando `p-valor < 0,05`.
 
-## 3. Coleta de dados reais
+**Expectativa estabelecida antes das simulações:** o teste binomial exato deve controlar melhor o erro tipo I quando o tamanho da amostra é pequeno e há poucas falhas esperadas; o teste Z pode ser liberal se a aproximação normal for inadequada.
 
-**Fonte:** GitHub Actions do repositório público [`pallets/flask`](https://github.com/pallets/flask/actions), obtidos pela API REST do GitHub (`/repos/{owner}/{repo}/actions/runs`).
+## 3. Dados reais e rastreabilidade
 
-**Critérios:** o script considera execuções com conclusão `success` ou `failure` e ignora conclusões como `cancelled` e `skipped`. As observações são execuções de workflows, e não necessariamente builds independentes.
+**Origem:** [GitHub Actions do projeto `pallets/flask`](https://github.com/pallets/flask/actions), via API REST `/repos/{owner}/{repo}/actions/runs`.
 
-**Amostra coletada:**
+O script `src/coleta.py` inclui apenas execuções com conclusão `success` ou `failure`; ignora execuções canceladas, puladas e outras conclusões. Os registros em `dados/execucoes_ci.csv` incluem identificador, data, link da execução, conclusão e indicador de falha. A amostra coletada vai de setembro a novembro de 2026.
 
-| Indicador | Resultado |
+| Indicador | Valor |
 |---|---:|
 | Execuções válidas | 100 |
 | Sucessos | 91 |
 | Falhas | 9 |
-| Proporção observada de falhas | 9,0% |
+| Taxa de falha observada | 9,0% |
 | Meta de referência | 5,0% |
+| Diferença observada | +4,0 pontos percentuais |
 
-O arquivo `dados/execucoes_ci.csv` contém os registros reais, com identificador da execução, repositório, conclusão, indicador binário de falha, data e URL de origem. Os registros dessa amostra abrangem execuções de setembro a novembro de 2026. **Não são dados simulados.**
+**Atenção:** o CSV versionado é a amostra fixa utilizada no dashboard. Reexecutar a coleta posteriormente pode alterar a amostra, pois as execuções do GitHub continuam ocorrendo. A coleta é opcional para iniciar o dashboard.
 
-A diferença observada entre 9% e 5% não determina, por si só, significância estatística.
+## 4. Sprint 1 — Modelo e gráficos G1/G2
 
-> **Reprodutibilidade:** o CSV coletado deve ser versionado no GitHub pelo **Walter** (Issue #64). Uma nova execução do comando de coleta pode produzir amostra diferente, pois o GitHub Actions continua recebendo execuções.
+O exemplo da Sprint 1 simula 100 observações Bernoulli independentes com probabilidade `p = 0,09`, estimada dos dados coletados; o total de falhas segue distribuição binomial. Utiliza-se semente fixa para reprodutibilidade.
 
-## 4. Modelo de simulação e expectativa anterior
+- **G1:** resumo percentual de sucesso/falha e histogramas discretos dos dados reais versus os simulados. O histograma tem dois valores possíveis, 0 e 1.
+- **G2:** distribuição normal de referência do teste Z e distribuição binomial sob H₀, regiões críticas e áreas correspondentes ao p-valor de um exemplo simulado.
 
-A simulação representa `n = 100` execuções por meio de sorteios Bernoulli independentes, com taxa de falha estimada a partir dos dados reais (`p = 0,09`). O número total de falhas segue uma distribuição binomial. O código utiliza semente fixa para tornar os resultados reproduzíveis.
+No exemplo fixo do G2, foi observada **1 falha em 100 execuções simuladas sob H₀**: `Z ≈ −1,835`, `p(Z) ≈ 0,0665` e `p(binomial exato) ≈ 0,0653`. Nenhum dos dois testes rejeita H₀ nesse exemplo. **Esse exemplo não é a aplicação aos dados reais.**
 
-**Expectativa antes da simulação:** o teste binomial exato tende a controlar melhor o erro tipo I quando a amostra é pequena ou quando o número esperado de falhas sob H₀ (`n × 0,05`) é baixo. Já o teste Z depende de uma aproximação normal, que pode ser inadequada nessas condições. Esta expectativa será avaliada sistematicamente na Sprint 2; não constitui uma conclusão antecipada.
+## 5. Sprint 2 — Simulações Q1, Q2 e Q3
 
-## 5. Testes estatísticos
+O arquivo `src/simulacoes.py` implementa Monte Carlo reprodutível com `numpy.random.default_rng(42)` e **10.000 repetições por configuração**. São comparados os mesmos conjuntos de contagens binomiais nos dois testes, para permitir comparação justa.
 
-- **Teste Z para uma proporção:** compara a proporção observada ao valor de referência usando aproximação normal.
-- **Teste binomial exato:** calcula o p-valor diretamente a partir da distribuição binomial, sem depender da aproximação normal.
+**Situações:**
 
-Ambos são aplicados ao **mesmo conjunto de dados simulados**, adotando α = 0,05. Se `p-valor < 0,05`, rejeita-se H₀; caso contrário, não há evidências suficientes para rejeitá-la. Não rejeitar H₀ **não** significa provar que ela é verdadeira.
+- **Amostra principal:** `n = 100`, tamanho da amostra real coletada, mas com *dados gerados por simulação*.
+- **Amostra pequena:** `n = 20`, para investigar a violação das condições usuais da aproximação normal: sob H₀, `n × p₀ = 20 × 0,05 = 1` (inferior a 5).
 
-**Exemplo exibido no dashboard durante a verificação local:** 1 falha em 100 execuções simuladas sob H₀; teste Z: `p ≈ 0,0665`; binomial exato: `p ≈ 0,0653`. Ambos não rejeitam H₀ nesse exemplo. Esses resultados pertencem à **simulação**, não à amostra real de 9 falhas.
+**Tamanhos de efeito estudados:** diferenças acima da meta de 5% de `0, 1, 2, 3, 4, 5, 7 e 10 pontos percentuais`, ou seja, proporções verdadeiras `p = 0,05; 0,06; 0,07; 0,08; 0,09; 0,10; 0,12; 0,15`. Trata-se apenas de efeitos **positivos**; a hipótese estatística continua bicaudal.
 
-## 6. Visualizações da Sprint 1
+- **Q1 — Erro tipo I:** quando o efeito é 0 e H₀ é verdadeira (`p = 0,05`), estimar a frequência de rejeições indevidas.
+- **Q2 — Poder:** para efeitos acima de 0, estimar a frequência de rejeição de H₀ quando há diferença real da meta.
+- **Q3 — Pressupostos:** repetir Q1 e Q2 para `n = 20` e comparar com `n = 100`.
 
-- **G1 — Dados reais × simulados:** compara as frequências de sucesso (`0`) e falha (`1`) no conjunto real e no conjunto simulado. Como as observações são binárias, utiliza gráficos de barras de frequências, equivalentes à representação de um histograma com duas categorias discretas.
-- **G2 — Distribuições dos testes sob H₀:** apresenta a aproximação normal do teste Z e a distribuição discreta do teste binomial, incluindo regiões críticas e as áreas correspondentes aos p-valores de um exemplo.
+### 5.1 Resultados reproduzidos
 
-Os gráficos contêm títulos, eixos, legendas e textos interpretativos no dashboard. O dashboard atual é a entrega parcial da Sprint 1; novas seções serão incluídas nas sprints seguintes.
+Os resultados abaixo foram obtidos na execução local documentada da Sprint 2 (10.000 repetições e semente fixa):
 
-## 7. Estrutura dos arquivos
+| Situação | Teste Z — erro tipo I | Binomial exato — erro tipo I |
+|---|---:|---:|
+| n = 100 | 3,58% | 3,58% |
+| n = 20 | 7,77% | 1,60% |
+
+| Taxa verdadeira de falhas | n = 100 — ambos os testes | n = 20 — Teste Z | n = 20 — Binomial exato |
+|---|---:|---:|---:|
+| 9% | 41,35% | 26,45% | 9,91% |
+| 15% | 94,61% | 60,35% | 36,29% |
+
+Para `n = 100`, os testes tiveram as mesmas **decisões de rejeição** nas configurações simuladas, embora seus p-valores não sejam necessariamente iguais. Para `n = 20`, o Z teve mais rejeições, porém seu erro tipo I de **7,77% ultrapassou α = 5%**; portanto, não se pode interpretar sua maior taxa de rejeição como vantagem inequívoca de desempenho. O binomial exato permaneceu conservador (1,60%).
+
+### 5.2 Gráficos G3 e G4
+
+- **G3 — Erro tipo I:** barras por teste e tamanho de amostra, com linha horizontal de referência em 5%.
+- **G4 — Curvas de poder:** proporção de rejeições versus efeito (em pontos percentuais acima de 5%), com cores fixas por teste e estilo da linha distinguindo os tamanhos de amostra. No ponto de efeito zero, a taxa representa **erro tipo I**, não poder.
+
+Todos os gráficos apresentam títulos, eixos, unidades, legendas e interpretações no dashboard.
+
+## 6. Aplicação aos dados reais
+
+O arquivo `src/analise_reais.py` aplica os testes à amostra observada (`9` falhas em `100` execuções), usando `src/estatistica.py`.
+
+| Teste | Estatística | p-valor | Efeito observado | Decisão (α = 0,05) |
+|---|---|---:|---:|---|
+| Z para uma proporção | Z ≈ 1,835 | 0,0665 | +4,0 p.p. | Não rejeita H₀ |
+| Binomial exato | k = 9/100 | 0,1002 | +4,0 p.p. | Não rejeita H₀ |
+
+A taxa observada é maior do que a meta, mas **nenhum dos testes encontrou evidência suficiente para rejeitar H₀ a 5%**. Não rejeitar H₀ não prova que a taxa verdadeira é de 5%, e um p-valor não mede a probabilidade de H₀ ser verdadeira.
+
+## 7. Conclusão e recomendação
+
+A expectativa inicial foi sustentada no cenário de amostra pequena: o **binomial exato** controlou o erro tipo I, enquanto o **teste Z** ultrapassou o nível nominal. Na amostra principal com 100 execuções, ambos tiveram decisões equivalentes nas simulações feitas. A maior taxa de rejeições do Z em `n = 20` não pode ser analisada isoladamente, pois vem acompanhada de excesso de falsos positivos.
+
+**Recomendação:** priorizar o **binomial exato** quando a taxa de referência é baixa e a amostra é pequena; considerar o Z quando a aproximação normal for adequada. A escolha depende dos pressupostos, e não apenas da curva de poder.
+
+**Limitações:** apenas um repositório; possível dependência entre workflows; exclusão de execuções inconclusivas; simplificação de probabilidade constante; poderes simulados somente para aumentos da taxa de falhas; e variação Monte Carlo finita, apesar da semente fixa.
+
+## 8. Organização do dashboard
+
+O dashboard Streamlit apresenta as seções, nesta ordem:
+
+1. Cenário, H₀/H₁ e origem da amostra.
+2. Os dados — G1 (comparação real/simulada).
+3. Como os testes funcionam — G2 (distribuições, regiões críticas, p-valores).
+4. Erro tipo I — G3 (Q1 e Q3).
+5. Poder estatístico — G4 (Q2 e Q3).
+6. Dados reais — tabela com estatística, p-valor, efeito e conclusão.
+7. Conclusão e recomendação.
+
+## 9. Estrutura dos arquivos
 
 ```text
 Laboratorio_04/
-├── app.py                    # Dashboard Streamlit (G1 e G2)
-├── README.md                 # Documentação e execução
-├── requirements.txt          # Dependências Python
+├── app.py                      # Dashboard Streamlit: G1 a G4 e seções finais
+├── README.md                   # Documentação
+├── requirements.txt            # Dependências
 ├── dados/
-│   └── execucoes_ci.csv     # Amostra real de execuções de CI
+│   └── execucoes_ci.csv       # Amostra real coletada
+├── snapshots/
+│   └── Lab04S01.csv           # Snapshot da Sprint 1
 └── src/
     ├── __init__.py
-    ├── coleta.py             # Coleta de execuções via GitHub API
-    └── estatistica.py        # Simulação e testes de hipótese
+    ├── coleta.py               # GitHub Actions → CSV
+    ├── estatistica.py          # Testes Z e binomial exato
+    ├── simulacoes.py           # Monte Carlo: Q1, Q2 e Q3
+    └── analise_reais.py        # Tabela estatística dos dados reais
 ```
 
-Os diretórios locais `.venv/` e `__pycache__/` **não devem ser commitados**.
+O snapshot `Lab04S02.csv` será produzido quando o GitHub Projects da Sprint 2 estiver concluído. As pastas `.venv/` e `__pycache__/` não devem ser versionadas.
 
-## 8. Como executar (Windows / PowerShell)
+## 10. Instalação e execução (Windows / PowerShell)
 
-Na raiz do repositório `Lab_Experimentacao_Software`:
+Na raiz do repositório:
 
 ```powershell
 cd Laboratorio_04
@@ -96,57 +155,73 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Com o CSV versionado em `dados/execucoes_ci.csv`, inicie o dashboard com **um único comando**:
+**Depois de instalar as dependências e com o CSV presente, execute o dashboard com um único comando:**
 
 ```powershell
-streamlit run app.py
+python -m streamlit run app.py
 ```
 
-O aplicativo normalmente estará disponível em `http://localhost:8501`.
+Se o VS Code ativar o ambiente virtual de outro laboratório, chame diretamente o Python deste laboratório:
 
-**Para atualizar a amostra real, opcionalmente execute:**
+```powershell
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+A interface normalmente abre em `http://localhost:8501`. A execução local de 10.000 repetições poderá levar alguns instantes na primeira abertura; o dashboard usa cache para evitar recálculo desnecessário.
+
+### Testes isolados dos módulos
+
+**Simulações (Q1–Q3):**
+
+```powershell
+.\.venv\Scripts\python.exe -c "from src.simulacoes import executar_simulacoes; df = executar_simulacoes(100); print(df.to_string(index=False))"
+```
+
+**Testes dos dados reais:**
+
+```powershell
+.\.venv\Scripts\python.exe -c "import pandas as pd; from src.analise_reais import tabela_dados_reais; df = pd.read_csv('dados/execucoes_ci.csv'); print(tabela_dados_reais(df).to_string(index=False))"
+```
+
+**Coleta opcional de dados atualizados** (não necessária para abrir o dashboard):
 
 ```powershell
 python -m src.coleta --repo pallets/flask --n 100
 ```
 
-A coleta requer acesso à API pública do GitHub e pode estar sujeita a limites de requisições. Se necessário, configure a variável de ambiente `GITHUB_TOKEN` antes de executá-la. **Não é necessário repetir a coleta para visualizar o dashboard se o CSV já estiver presente.**
+A coleta usa a API pública do GitHub e pode necessitar de `GITHUB_TOKEN` dependendo dos limites de requisições.
 
-## 9. Limitações e cuidados metodológicos
+## 11. GitHub Projects, Issues e commits
 
-- A amostra representa apenas um repositório e não permite generalização automática para todos os projetos de software.
-- Execuções de workflows podem ser dependentes entre si, contrariando a hipótese simplificadora de independência do modelo Bernoulli.
-- Excluir execuções canceladas ou inconclusivas pode influenciar a taxa observada.
-- O teste Z pode ter aproximação insatisfatória com proporções próximas de zero e poucos eventos esperados.
-- Um p-valor não informa a probabilidade de H₀ ser verdadeira, nem mede sozinho a relevância prática de uma diferença.
+### Sprint 1 — Concluída
 
-## 10. Divisão das Issues e commits
+| Integrante | Issue | Entrega |
+|---|---|---|
+| Bruna | [#63](https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/63) | Testes, simulação inicial e documentação |
+| Walter | [#64](https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/64) | Coleta de dados reais e CSV |
+| Ana | [#65](https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/65) | Dashboard e gráficos G1/G2 |
+| Bruna | [#66](https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/66) | Snapshot do Project |
 
-| Integrante | Issue | Responsabilidade | Arquivos principais |
-|---|---|---|---|
-| **Bruna** | [#63](https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/63) | Simulação, testes estatísticos, estrutura, documentação e integração | `src/estatistica.py`, `src/__init__.py`, `requirements.txt`, `README.md` |
-| **Walter** | [#64](https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/64) | Coleta e preparação dos dados reais | `src/coleta.py`, `dados/execucoes_ci.csv` |
-| **Ana** | [#65](https://github.com/bruna-bernardes/Lab_Experimentacao_Software/issues/65) | Dashboard, gráficos G1 e G2 e interpretações | `app.py` |
+### Sprint 2 — Issues a criar
 
-Cada integrante deve ser o **Assignee** de sua Issue e realizar seu commit usando a própria identidade Git. As mensagens devem referenciar a Issue correspondente:
+| Integrante | Issue | Entrega planejada |
+|---|---|---|
+| Bruna | A definir | `src/simulacoes.py`, Q1–Q3, documentação e integração |
+| Ana | A definir | `app.py`, G3/G4 e integração visual das seções 6/7 |
+| Walter | A definir | `src/analise_reais.py`, tabela de dados reais |
 
-```bash
-# Bruna
-git commit -m "feat: implementar simulacao e testes estatisticos refs #63"
-# Walter
-git commit -m "feat: implementar coleta de dados reais refs #64"
-# Ana
-git commit -m "feat: implementar dashboard com graficos G1 e G2 refs #65"
+Cada integrante deve ser Assignee de ao menos uma Issue com **código commitado**, e o respectivo commit deve fazer referência ao **número real** da Issue. Não usar números de Issues provisórios nas mensagens de commit. Manter os cartões do GitHub Projects atualizados e respeitar o WIP.
+
+### Snapshot da Sprint 2 (após concluir as Issues)
+
+Na raiz do repositório:
+
+```powershell
+python scripts_comuns/exportar_snapshot_project.py --laboratorio Laboratorio_04 --sprint Lab04S02
 ```
 
-Os arquivos devem ser adicionados seletivamente (`git add <caminhos>`) para que um commit não inclua, por engano, arquivos de outro integrante. O GitHub Projects deve refletir o andamento das atividades.
+O comando gera `Laboratorio_04/snapshots/Lab04S02.csv`. Conferir se as Issues e responsáveis corretos estão listados antes do commit.
 
-## 11. Próximas etapas — Sprint 2
+## 12. Apresentação final
 
-- **Q1:** estimar erro tipo I com 10.000 simulações sob H₀.
-- **Q2:** estimar poder estatístico para pelo menos cinco tamanhos de efeito, começando em zero.
-- **Q3:** repetir as análises em uma situação com violação de pressupostos.
-- **G3:** comparar erro tipo I por teste e situação, com referência em 5%.
-- **G4:** apresentar curvas de poder dos testes por tamanho de efeito.
-
-Essas implementações não fazem parte da entrega da Sprint 1.
+O dashboard apresenta os resultados para apoiar a discussão oral. A apresentação final deve cobrir cenário, hipóteses, escolha de testes, parâmetros, significado dos p-valores, Q1/Q2/Q3, pressupostos, resultados nos dados reais, recomendação e limitações. Conforme o enunciado, os integrantes dividem as perguntas, com **ao menos quatro respostas por integrante**. A entrega final e sua apresentação possuem avaliação separada da Sprint 2.
