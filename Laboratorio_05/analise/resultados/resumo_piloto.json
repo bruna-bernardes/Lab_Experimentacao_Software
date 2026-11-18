@@ -1,0 +1,10 @@
+{
+  "paginas": 8,
+  "respostas": 24,
+  "mediana_tempo_total_ms": 184.6365,
+  "mediana_bytes_transferidos": 28268.0,
+  "paginas_conjunto_minimo": 8,
+  "alfa": 0.05,
+  "p0_conjunto_minimo": 0.8,
+  "nota": "Resultados do piloto. A amostra confirmatória é a da Sprint 2."
+}
