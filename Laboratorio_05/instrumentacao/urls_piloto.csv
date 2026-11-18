@@ -1,0 +1,9 @@
+id_pagina,grupo,rotulo,url
+portal-inicial,portal,Página inicial,https://www.gov.br/pt-br
+portal-servicos,portal,Catálogo de serviços,https://www.gov.br/pt-br/servicos
+portal-categorias,portal,Categorias,https://www.gov.br/pt-br/categorias
+portal-orgaos,portal,Órgãos do governo,https://www.gov.br/pt-br/orgaos-do-governo
+orgao-inss,orgao,INSS,https://www.gov.br/inss/pt-br
+orgao-saude,orgao,Ministério da Saúde,https://www.gov.br/saude/pt-br
+orgao-trabalho,orgao,Trabalho e Emprego,https://www.gov.br/trabalho-e-emprego/pt-br
+orgao-mec,orgao,MEC,https://www.gov.br/mec/pt-br
