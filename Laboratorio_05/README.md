@@ -3,7 +3,7 @@
 **Disciplina:** Laboratório de Experimentação de Software — PUC Minas
 **Professor:** Danilo Maia
 **Grupo:** Ana Luiza, Bruna Bernardes e Walter Louback
-**Sprint em curso:** Lab05S01
+**Sprint em curso:** Lab05S02
 
 **Repositório:** <https://github.com/bruna-bernardes/Lab_Experimentacao_Software>
 **GitHub Projects:** <https://github.com/users/bruna-bernardes/projects/2/views/1>
@@ -24,6 +24,17 @@ O objeto é o portal servido ao cidadão. Não é o repositório, nem commits, n
 | Plano de análise | `planejamento/proposta_s01.md` e `analise/LEIA-ME.md` |
 | Coleta piloto versionada e validada | `instrumentacao/dados/` |
 | Descritiva, testes, tamanho de efeito, figuras e impacto | `analise/resultados/relatorio_piloto.md` |
+
+## Onde está cada parte da Sprint 2
+
+A proposta da Sprint 1 não foi reaberta. As 7 categorias continuam para a Sprint 3.
+
+| Entrega da Sprint 2 | Lugar |
+|---|---|
+| Por que a amostra tem 18 páginas e a unidade é a página | `planejamento/amostra_s02.md` |
+| Ameaças à validade com o n da amostra confirmatória | `planejamento/ameacas_s02.md` |
+| Lista, duas janelas validadas e regra da corrida | `instrumentacao/protocolo_coleta_s02.md` e `instrumentacao/dados/` |
+| Descritiva, testes, tamanho de efeito, figuras e impacto | `analise/resultados/relatorio_s02.md` |
 
 ## Divisão
 
@@ -52,4 +63,10 @@ A análise do piloto já versionado, sem novo acesso ao portal:
 python3 Laboratorio_05/analise/analisar_piloto.py
 ```
 
-Uma coleta nova substitui o CSV, leva cerca de um minuto e fica em uma requisição por segundo. O comando está em `instrumentacao/protocolo_coleta.md`.
+A análise da amostra confirmatória, também sem novo acesso, lê as duas janelas:
+
+```bash
+python3 Laboratorio_05/analise/analisar_s02.py
+```
+
+O piloto, se for coletado de novo, substitui o CSV dele. As janelas da Sprint 2 não: se o arquivo já existe, o comando para. A regra está em `instrumentacao/protocolo_coleta_s02.md`.
