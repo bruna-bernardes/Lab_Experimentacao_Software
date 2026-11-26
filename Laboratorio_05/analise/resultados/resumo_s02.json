@@ -1,0 +1,16 @@
+{
+  "paginas": 18,
+  "portal": 9,
+  "orgao": 9,
+  "respostas": 108,
+  "mediana_tempo_total_ms": 121.35425,
+  "mediana_bytes_transferidos": 26690.5,
+  "paginas_conjunto_minimo": 18,
+  "alfa": 0.05,
+  "p0_conjunto_minimo": 0.8,
+  "janelas": [
+    "noite",
+    "dia"
+  ],
+  "nota": "Amostra confirmatória da Sprint 2. Cada página entra uma vez."
+}

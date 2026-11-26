@@ -27,6 +27,17 @@ O plano metodológico está em `planejamento/proposta_s01.md`. Aqui ele vira con
 - O piloto não corrige múltiplas comparações e não fecha o estudo. A conta de tamanho de amostra indica quantas páginas a Sprint 2 precisa para um efeito grande na proporção.
 - Impacto: tempo mediano por pessoa, mais um cenário que multiplica esse tempo pelo piso de 80 milhões de acessos únicos em março de 2026. O 1,7 bilhão de acessos do trimestre fica de fora da multiplicação.
 
+## Sprint 2
+
+O script `analisar_s02.py` lê as duas janelas já validadas em `instrumentacao/dados/coleta_s02_noite.csv` e `coleta_s02_dia.csv`. Não coleta página. Cada página entra uma vez: a mediana das três repetições de cada janela e, em seguida, a mediana dessas duas medianas. As seis respostas não viram seis observações.
+
+```bash
+python3 test_analise.py
+python3 analisar_s02.py
+```
+
+O texto fica em `resultados/relatorio_s02.md`. O relatório do piloto não é reescrito. O comando recusa a conta se uma janela não existir ou se a validação apontar problema.
+
 ## O que esta pasta não faz
 
 Não redefine a pergunta, não altera a rubrica e não inclui requisição ao portal. Isso está no planejamento e na instrumentação.
