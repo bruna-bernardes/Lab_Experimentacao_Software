@@ -1,0 +1,19 @@
+id_pagina,grupo,rotulo,url
+portal-inicial,portal,Página inicial,https://www.gov.br/pt-br
+portal-servicos,portal,Catálogo de serviços,https://www.gov.br/pt-br/servicos
+portal-categorias,portal,Categorias,https://www.gov.br/pt-br/categorias
+portal-orgaos,portal,Órgãos do governo,https://www.gov.br/pt-br/orgaos-do-governo
+portal-apps,portal,Aplicativos,https://www.gov.br/pt-br/apps
+portal-acessibilidade,portal,Acessibilidade,https://www.gov.br/pt-br/acessibilidade
+portal-por-dentro,portal,Por dentro do gov.br,https://www.gov.br/pt-br/por-dentro-do-govbr
+portal-sobre,portal,Sobre o gov.br,https://www.gov.br/pt-br/sobre
+portal-termos,portal,Termos de uso,https://www.gov.br/pt-br/termos-de-uso
+orgao-inss,orgao,INSS,https://www.gov.br/inss/pt-br
+orgao-saude,orgao,Ministério da Saúde,https://www.gov.br/saude/pt-br
+orgao-trabalho,orgao,Trabalho e Emprego,https://www.gov.br/trabalho-e-emprego/pt-br
+orgao-mec,orgao,MEC,https://www.gov.br/mec/pt-br
+orgao-fazenda,orgao,Ministério da Fazenda,https://www.gov.br/fazenda/pt-br
+orgao-agricultura,orgao,Ministério da Agricultura,https://www.gov.br/agricultura/pt-br
+orgao-cidades,orgao,Ministério das Cidades,https://www.gov.br/cidades/pt-br
+orgao-cultura,orgao,Ministério da Cultura,https://www.gov.br/cultura/pt-br
+orgao-defesa,orgao,Ministério da Defesa,https://www.gov.br/defesa/pt-br

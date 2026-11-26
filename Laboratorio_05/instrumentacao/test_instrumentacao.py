@@ -10,6 +10,7 @@ from pathlib import Path
 
 import gzip
 
+from coleta_s02 import janela_congelada
 from medicao import (
     COLUNAS,
     ITENS_PONTUACAO,
@@ -179,6 +180,69 @@ class TestesColeta(unittest.TestCase):
                     baixar_fn=baixar,
                 )
         self.assertEqual(baixou, [])
+
+    def test_nota_opcional_nao_altera_o_piloto(self):
+        urls = [{"id_pagina": "a", "grupo": "portal", "rotulo": "A", "url": "https://www.gov.br/pt-br"}]
+
+        def robots(limitador):
+            limitador.aguardar()
+            return 200, "User-agent: *\nDisallow:\n"
+
+        def baixar(url, limitador):
+            limitador.aguardar()
+            return {
+                "url_final": url,
+                "status_http": 200,
+                "redirecionamentos": 0,
+                "tempo_tls_ms": 10.0,
+                "ttfb_ms": 20.0,
+                "tempo_total_ms": 30.0,
+                "bytes_transferidos": 100,
+                "bytes_html": 200,
+                "content_encoding": "identity",
+                "erro": "",
+                **avaliar_cabecalhos({}),
+            }
+
+        relogio = RelogioFalso()
+        with tempfile.TemporaryDirectory() as pasta:
+            base = Path(pasta)
+            meta = executar_coleta(
+                urls,
+                destino_csv=base / "piloto.csv",
+                destino_robots=base / "robots.txt",
+                destino_meta=base / "meta.json",
+                repeticoes=1,
+                limitador=Limitador(relogio=relogio.relogio, dormir=relogio.dormir),
+                obter_robots_fn=robots,
+                baixar_fn=baixar,
+                mostrar=lambda *_args: None,
+            )
+            self.assertIn("piloto da Sprint 1", meta["nota"])
+            relogio_s02 = RelogioFalso()
+            meta_s02 = executar_coleta(
+                urls,
+                destino_csv=base / "s02.csv",
+                destino_robots=base / "robots_s02.txt",
+                destino_meta=base / "meta_s02.json",
+                repeticoes=1,
+                limitador=Limitador(relogio=relogio_s02.relogio, dormir=relogio_s02.dormir),
+                obter_robots_fn=robots,
+                baixar_fn=baixar,
+                mostrar=lambda *_args: None,
+                nota="Coleta confirmatória da Sprint 2, janela noite.",
+            )
+        self.assertEqual(meta_s02["nota"], "Coleta confirmatória da Sprint 2, janela noite.")
+
+    def test_janela_com_csv_fica_congelada(self):
+        with tempfile.TemporaryDirectory() as pasta:
+            base = Path(pasta)
+            self.assertFalse(janela_congelada("noite", base))
+            destino = base / "dados"
+            destino.mkdir()
+            (destino / "coleta_s02_noite.csv").write_text("id\n", encoding="utf-8")
+            self.assertTrue(janela_congelada("noite", base))
+            self.assertFalse(janela_congelada("dia", base))
 
 
 def _linha_valida(identificador: str, grupo: str, repeticao: int, momento: datetime) -> dict[str, str]:

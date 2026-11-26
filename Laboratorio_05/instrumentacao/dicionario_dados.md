@@ -52,3 +52,7 @@ Arquivos ao lado do CSV:
 | `validacao_piloto.json` | Resultado da validação, com a lista de problemas |
 
 Não existem colunas de cookie, de IP do cliente, de corpo HTML nem de dado de cidadão.
+
+## Sprint 2
+
+A amostra confirmatória usa as mesmas colunas. A janela não é uma coluna: ela está no nome do arquivo, `coleta_s02_noite.csv` e `coleta_s02_dia.csv`. Cada um tem o próprio `meta`, o `robots.txt` daquela corrida e o JSON de validação. Uma linha continua sendo uma repetição de uma página, agora dentro de uma janela.

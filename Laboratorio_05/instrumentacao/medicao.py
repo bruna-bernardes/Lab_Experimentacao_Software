@@ -329,7 +329,7 @@ def ler_urls(caminho: Path) -> list[dict[str, str]]:
         raise ValueError(f"lista de URLs vazia: {caminho}")
     for linha in linhas:
         if set(linha) < {"id_pagina", "grupo", "rotulo", "url"}:
-            raise ValueError("urls_piloto.csv precisa das colunas id_pagina, grupo, rotulo e url")
+            raise ValueError("a lista de URLs precisa das colunas id_pagina, grupo, rotulo e url")
         if urlsplit(linha["url"]).hostname != HOST_ALVO:
             raise ValueError(f"URL fora de {HOST_ALVO}: {linha['url']}")
     return linhas
@@ -399,6 +399,7 @@ def executar_coleta(
     obter_robots_fn=obter_robots,
     baixar_fn=baixar,
     mostrar=print,
+    nota: str | None = None,
 ) -> dict:
     """Coleta em rodadas: cada repetição percorre todas as páginas uma vez."""
     limitador = limitador or Limitador()
@@ -443,7 +444,7 @@ def executar_coleta(
         "user_agent": USER_AGENT,
         "robots_status": status_robots,
         "requisicoes_http_previstas": 1 + len(urls) * repeticoes,
-        "nota": "Coleta piloto da Sprint 1. A amostra confirmatória fica para a Sprint 2.",
+        "nota": nota or "Coleta piloto da Sprint 1. A amostra confirmatória fica para a Sprint 2.",
     }
     destino_meta.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return meta

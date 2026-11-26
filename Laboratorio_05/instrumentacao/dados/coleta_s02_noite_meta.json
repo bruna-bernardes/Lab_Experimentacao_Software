@@ -1,0 +1,13 @@
+{
+  "software": "Portal GOV.BR",
+  "host": "www.gov.br",
+  "iniciado_em_utc": "2026-11-26T02:21:44+00:00",
+  "finalizado_em_utc": "2026-11-26T02:22:38+00:00",
+  "intervalo_minimo_s": 1.0,
+  "repeticoes": 3,
+  "paginas": 18,
+  "user_agent": "LabExperimentacaoSoftware-PUCMinas/1.0 (+https://github.com/bruna-bernardes/Lab_Experimentacao_Software; estudo academico; sem dados pessoais)",
+  "robots_status": 200,
+  "requisicoes_http_previstas": 55,
+  "nota": "Coleta confirmatória da Sprint 2, janela noite. Não substitui o piloto da Sprint 1."
+}
